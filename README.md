@@ -153,7 +153,7 @@ services:
       dockerfile: Dockerfile
     command: python /app/server.py
     volumes:
-      - .:/app
+      - ./demo-app:/app
     ports:
       - "5000:5000"
     stdin_open: true
