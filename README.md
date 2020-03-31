@@ -1,6 +1,8 @@
 Tech talk: Docker
 =================
 
+![Why Docker born](https://raw.githubusercontent.com/eureciclo/docker-tech-talk/master/docker-born.jpg)
+
 Objetivo
 --------
 
