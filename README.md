@@ -228,3 +228,11 @@ Depois disso temos toda uma camada de Kubernetes que puxa essa imagem e sobe de 
   O Swarm também é um orquestrador de containers, só que, como estamos subindo ele manualmente em máquinas virtuais, o processo é mais custoso. Um exemplo disso é termos que configurar um loadbalancer manualmente, enquanto no Kubernetes da Google Cloud, ele já sobe um padrão e tudo funciona.
 
   [Mostrar as duas VMs do Swarm, docker service ls]
+
+### Projetos pessoais
+
+  Para projeto pessoais, é possível utilizar o próprio docker-compose up que funciona bem. Inclusive existe uma configuração que o compose reinicia o serviço se ocorrer algum erro.
+
+  A única ressalva é deixar seu banco de dados instalado na máquina local, porque os dados podem ser corrompidos.
+
+  Mais info: https://vsupalov.com/database-in-docker/
