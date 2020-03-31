@@ -1,0 +1,19 @@
+version: '3.6'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python /app/server.py
+    volumes:
+      - ./demo-app:/app
+    ports:
+      - "5000:5000"
+    stdin_open: true
+    tty: true
+  redis:
+    image: redis:5.0.4-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    hostname: redis
+    ports:
+      - "6379:6379"
