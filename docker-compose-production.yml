@@ -5,9 +5,9 @@ services:
     volumes:
       - ./demo-app:/app
     ports:
-      - "5000:5000"
+      - 5000
     environment:
-      - SERVICE_PORTS=8080
+      - SERVICE_PORTS=5000
     stdin_open: true
     tty: true
     deploy:
