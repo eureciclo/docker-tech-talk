@@ -68,6 +68,7 @@ Nesse projeto temos um servidor de testes, mas antes precisamos instalar as depe
 ```
 apk --update add build-base python3-dev
 pip install klein
+pip install redis
 ```
 
 Aí sim podemos rodar o servidor com:
