@@ -1,10 +1,7 @@
 version: '3.6'
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: python /app/server.py
+    image: demo-server-test:latest
     volumes:
       - ./demo-app:/app
     ports:
