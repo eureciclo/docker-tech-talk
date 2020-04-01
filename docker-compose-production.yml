@@ -1,0 +1,49 @@
+version: '3.6'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python /app/server.py
+    volumes:
+      - ./demo-app:/app
+    ports:
+      - "5000:5000"
+    environment:
+      - SERVICE_PORTS=8080
+    stdin_open: true
+    tty: true
+    deploy:
+     replicas: 2
+     update_config:
+       parallelism: 5
+       delay: 10s
+     restart_policy:
+       condition: on-failure
+       max_attempts: 3
+       window: 120s
+  redis:
+    image: redis:5.0.4-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    hostname: redis
+    ports:
+      - "6379:6379"
+  proxy:
+    image: dockercloud/haproxy
+    depends_on:
+      - app
+    environment:
+      - BALANCE=leastconn
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 80:80
+    networks:
+      - web
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+networks:
+  web:
+    driver: overlay
