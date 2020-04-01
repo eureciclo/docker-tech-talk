@@ -200,7 +200,7 @@ Com o compose, você também consegue subir o container e acessar o terminal ou 
 ```
 docker-compose run app sh
 apk add redis
-redis -h redis
+redis-cli -h redis
 ping
 ```
 
