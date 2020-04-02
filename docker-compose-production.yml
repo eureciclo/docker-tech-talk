@@ -8,8 +8,6 @@ services:
       - 5000
     environment:
       - SERVICE_PORTS=5000
-    stdin_open: true
-    tty: true
     deploy:
      replicas: 2
      update_config:
@@ -19,12 +17,19 @@ services:
        condition: on-failure
        max_attempts: 3
        window: 120s
+    networks:
+      - web
   redis:
     image: redis:5.0.4-alpine
     command: ["redis-server", "--appendonly", "yes"]
     hostname: redis
     ports:
       - "6379:6379"
+    networks:
+      - web
+    deploy:
+      placement:
+        constraints: [node.role == manager]
   proxy:
     image: dockercloud/haproxy
     depends_on:
