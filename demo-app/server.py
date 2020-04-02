@@ -1,9 +1,11 @@
+import socket
 from redis import Redis
 from klein import run, route
 
 @route('/')
 def home(request):
-    return 'Hello, world!'
+    hostname = socket.gethostname()
+    return 'Hello, world!<br/>from yours, truly: ' + hostname
 
 @route('/redis')
 def redis(request):
