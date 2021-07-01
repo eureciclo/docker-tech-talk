@@ -17,3 +17,14 @@ services:
     hostname: redis
     ports:
       - "6379:6379"
+  cloudsql:
+    image: gcr.io/cloudsql-docker/gce-proxy:1.16
+    command: >
+      /cloud_sql_proxy
+      -instances=INSTANCE-IDENTIFIER=tcp:0.0.0.0:3306
+      -dir=/cloudsql
+      -credential_file=/secrets/cloudsql/credentials.json
+    volumes:
+      - ./key.json:/secrets/cloudsql/credentials.json
+    ports:
+      - "3406:3306"

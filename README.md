@@ -6,14 +6,16 @@ Tech talk: Docker
 Objetivo
 --------
 
-A ideia é sair daqui sabendo o que é e como usar Docker no ambiente de desenvolvimento e dar uma ideia de como usamos em produção com o Kubernetes e noções básicas sobre o Swarm.
+A ideia é sair daqui sabendo o que é e como usar Docker no ambiente de desenvolvimento e dar uma ideia de como usamos em produção com o Kubernetes ~e noções básicas sobre o Swarm~.
 
 1. O que é? Vantagens e desvantagens.
 2. Usando imagens pré prontas.
 3. Montando uma imagem customizada
 4. Compose
 5. O que preciso mudar no meu projeto para usar Docker?
-6. Como usar em produção?
+6. Como usar o docker para acessar o banco de produção?
+7. PHP no Docker é possível?
+8. Como usar em produção?
 
 ## O que é? Vantagens e desvantagens.
 
@@ -209,6 +211,49 @@ ping
 A maior mudança geralmente é a questão de container ser efêmero. Você não pode contar que arquivos enviados ao servidor estarão lá, por isso é necessário subir tudo em um storage.
 
 Fora isso, coisas devem dar pau no começo, mas geralmente são erros bem documentados e com soluções.
+
+## Como usar o docker para acessar o banco de produção?
+
+É uma boa prática de segurança sempre fechar seu banco de dados para a internet.
+
+Na Google Cloud você pode configurar um proxy para acessar o banco de forma segura. Na sua máquina, você vai acessar o localhost, mas vai bater em produção.
+
+Para utilizar o proxy, você precisa de uma conta de serviço autorizada à acessar o banco. Para criar, vá no console da Google Cloud:
+
+IAM > Contas de serviço > Criar conta de serviço
+
+```
+Nome: qualquer nome
+Acessos: Administrador do Cloud SQL
+```
+
+Depois de criar, ache sua credencial na lista, clique no menu de ações > Gerenciar Chaves > Adicionar Chave > Criar nova chave > JSON.
+
+Agora vamos criar a configuração do serviço do cloudsql pelo docker-compose com a credencial criada:
+
+```
+  cloudsql:
+    image: gcr.io/cloudsql-docker/gce-proxy:1.16
+    command: >
+      /cloud_sql_proxy
+      -instances=INSTANCE-IDENTIFIER=tcp:0.0.0.0:3306
+      -dir=/cloudsql
+      -credential_file=/secrets/cloudsql/credentials.json
+    volumes:
+      - ./key.json:/secrets/cloudsql/credentials.json
+    ports:
+      - "3406:3306"
+```
+
+Obs: Lembre de trocar o INSTANCE-IDENTIFIER pelo identificador real da instância do banco.
+
+O banco de dados estará acessível via localhost na porta 3406.
+
+## PHP no Docker é possível?
+
+TODO: Falar que rodamos o PHP pelo php-fpm que não é um servidor http. Por isso precisa de um servidor para expôr esse serviço para web.
+
+[Mostrar Dockerfile desses projetos]
 
 ## Como usar em produção?
 
